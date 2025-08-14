@@ -1,95 +1,94 @@
 # AWS Dynamic String Challenge
 
-## Descripción del Desafío
+## Challenge Description
 
-Crear un servicio en la nube que sirva una página HTML mostrando una cadena configurable dinámicamente **sin requerir redeploy** cuando la cadena cambie.
+Create a cloud service that serves an HTML page displaying a dynamically configurable string **without requiring redeployment** when the string changes.
 
 ---
 
-## Objetivo
+## Objective
 
-- Servir una página HTML con el contenido:
+- Serve an HTML page with the following content:
 
 ```html
-<h1>La cadena guardada es [valor_dinámico]</h1>
+<h1>The stored string is [dynamic_value]</h1>
 ```
 
-- El valor dinámico debe poder modificarse mediante configuración (sin cambios de código).
-- Accesible mediante una URL pública.
-- Todos los usuarios que accedan a la URL deben ver el mismo valor.
-- Implementar toda la infraestructura con **Terraform**.
+- The dynamic value must be modifiable via configuration (without code changes).
+- Accessible via a public URL.
+- All users accessing the URL must see the same value.
+- Deploy the entire infrastructure with **Terraform**.
 
 ---
 
-## Solución Propuesta
+## Proposed Solution
 
-### Arquitectura
+### Architecture
 
-```mermaid
-graph LR
-    A[Usuario] --> B[API Gateway]
-    B --> C[Lambda]
-    C --> D[SSM Parameter Store]
+```Mermaid graph LR
+A[User] --> B[API Gateway]
+B --> C[Lambda]
+C --> D[SSM Parameter Store]
 ```
 
-**Flujo:**
+**Flow:**
 
-1. El usuario accede a la URL pública del API Gateway.
-2. API Gateway invoca una función Lambda escrita en Python 3.12.
-3. Lambda obtiene el valor dinámico desde AWS SSM Parameter Store.
-4. Lambda construye y devuelve el HTML con el valor actualizado.
-5. Cualquier cambio en SSM es visible inmediatamente para todos los usuarios.
-
----
-
-## Pila Tecnológica
-
-| Componente        | Tecnología               | Propósito                                  |
-|-------------------|--------------------------|---------------------------------------------|
-| **Cómputo**       | AWS Lambda (Python 3.12) | Generación dinámica de HTML                 |
-| **API Pública**   | API Gateway              | Endpoint HTTPS accesible globalmente        |
-| **Configuración** | AWS SSM Parameter Store  | Almacenar cadena dinámica                   |
-| **IaC**           | Terraform (AWS Provider v5.x) | Despliegue de infraestructura               |
+1. The user accesses the public API Gateway URL.
+2. API Gateway invokes a Lambda function written in Python 3.12.
+3. Lambda retrieves the dynamic value from the AWS SSM Parameter Store.
+4. Lambda constructs and returns the HTML with the updated value.
+5. Any changes to SSM are immediately visible to all users.
 
 ---
 
-## Comparativa de Alternativas
+## Technology Stack
 
-| Criterio                 | API Gateway + Lambda + SSM | S3 + CloudFront + Lambda@Edge + SSM |
-|--------------------------|----------------------------|--------------------------------------|
-| **Simplicidad**          | Alta                       | Media                                |
-| **Velocidad Global**     | Media (latencia <200ms)     | Alta (CDN global)                    |
-| **Costo Bajo Uso**       | Muy bajo                   | Muy bajo                             |
-| **Tiempo de Implementar**| Rápido                     | Más lento                            |
-| **Prueba Local**         | Fácil                      | Difícil                              |
-| **Demo Entrevista**      | Ideal                      | Más compleja                         |
-
-**Para esta entrega** se eligió **API Gateway + Lambda + SSM** por simplicidad, facilidad de defensa en entrevista y velocidad de implementación.
+| Component | Technology | Purpose |
+|-------------------|------------------------------------------|---------------------------------------------|
+| **Computation** | AWS Lambda (Python 3.12) | Dynamic HTML Generation |
+| **Public API** | API Gateway | Globally Accessible HTTPS Endpoint |
+| **Configuration** | AWS SSM Parameter Store | Store Dynamic String |
+| **IaC** | Terraform (AWS Provider v5.x) | Infrastructure Deployment |
 
 ---
 
-## Configuración del Proyecto
+## Alternatives Comparison
 
-### 1. Prerrequisitos
+| Criterion | API Gateway + Lambda + SSM | S3 + CloudFront + Lambda@Edge + SSM |
+|--------------------------|----------------------------|-------------------------------------|
+| **Simplicity** | High | Medium |
+| **Overall Speed** | Medium (latency <200ms) | High (global CDN) |
+| **Low Cost of Use** | Very Low | Very Low |
+| **Time to Deploy** | Fast | Slower |
+| **Local Test** | Easy | Difficult |
+| **Interview Demo** | Ideal | More Complex |
+
+**For this installment**, **API Gateway + Lambda + SSM** was chosen for its simplicity, ease of interview defense, and speed of implementation.
+
+---
+
+## Project Setup
+
+### 1. Prerequisites
 
 ```bash
-# Instalar herramientas necesarias
+# Install Required Tools
 brew install terraform awscli python
 
-# Verificar versiones
-terraform -v    # >= 1.8.0
-aws --version   # >= 2.0
-python3 --version  # >= 3.12
+# Check Versions
+terraform -v # >= 1.8.0
+aws --version # >= 2.0
+python3 --version # >= 3.12
 ```
 
-### 2. Configuración de AWS
+### 2. AWS Configuration
 
 ```bash
 aws configure
-# Ingresar credenciales AWS cuando se solicite
+# Enter AWS credentials when prompted
 ```
 
-### 3. Clonar Repositorio
+### 3. Clone Repository
 
 ```bash
 git clone https://github.com/your-user/aws-dynamic-string.git
@@ -98,28 +97,28 @@ cd aws-dynamic-string
 
 ---
 
-## Pasos de Despliegue
+## Deployment Steps
 
-### 1. Inicializar Terraform
+### 1. Initialize Terraform
 
 ```bash
 cd terraform
 terraform init
 ```
 
-### 2. Revisar el Plan de Ejecución
+### 2. Review the Execution Plan
 
 ```bash
 terraform plan
 ```
 
-### 3. Desplegar Infraestructura
+### 3. Deploy Infrastructure
 
 ```bash
 terraform apply -auto-approve
 ```
 
-### 4. Obtener la URL Pública
+### 4. Get the Public URL
 
 ```bash
 terraform output -raw api_gateway_url
@@ -127,58 +126,58 @@ terraform output -raw api_gateway_url
 
 ---
 
-## Cómo Funciona
+## How It Works
 
 ### AWS SSM Parameter Store
 
-- Parámetro: `/challenge/dynamic_string`
-- Tipo: `String`
-- Se actualiza mediante CLI o consola:
+- Parameter: `/challenge/dynamic_string`
+- Type: `String`
+- Update via CLI or console:
 
 ```bash
-aws ssm put-parameter   --name "/challenge/dynamic_string"   --value "nuevo-valor"   --type String   --overwrite
+aws ssm put-parameter --name "/challenge/dynamic_string" --value "new-value" --type String --overwrite
 ```
 
 ### AWS Lambda
 
 - Python 3.12
-- Lee el parámetro desde SSM con boto3
-- Genera el HTML dinámico
+- Read the parameter from SSM with boto3
+- Generate the dynamic HTML
 
 ### API Gateway
 
-- Endpoint HTTPS público
-- Método GET que invoca Lambda
+- Endpoint Public HTTPS
+- GET method that invokes Lambda
 
 ---
 
-## Pruebas de la Solución
+## Solution Testing
 
-### 1. Verificación Inicial
-
-```bash
-curl https://<api_id>.execute-api.<region>.amazonaws.com/prod
-# <h1>La cadena guardada es: hello-world</h1>
-```
-
-### 2. Cambiar la Cadena
-
-```bash
-aws ssm put-parameter   --name "/challenge/dynamic_string"   --value "cadena-actualizada"   --type String   --overwrite
-```
-
-### 3. Verificar Cambio
+### 1. Initial Verification
 
 ```bash
 curl https://<api_id>.execute-api.<region>.amazonaws.com/prod
-# <h1>La cadena guardada es: cadena-actualizada</h1>
+# <h1>The saved string is: hello-world</h1>
+```
+
+### 2. Change the String
+
+```bash
+aws ssm put-parameter --name "/challenge/dynamic_string" --value "updated-string" --type String --overwrite
+```
+
+### 3. Verify Change
+
+```bash
+curl https://<api_id>.execute-api.<region>.amazonaws.com/prod
+# <h1>The saved string is: updated-string</h1>
 ```
 
 ---
 
-## Monitoreo
+## Monitoring
 
-### Logs de Lambda
+### Lambda Logs
 
 ```bash
 aws logs tail /aws/lambda/dynamic-string --follow
@@ -186,15 +185,15 @@ aws logs tail /aws/lambda/dynamic-string --follow
 
 ---
 
-## Limpieza
+## Cleanup
 
-Destruir infraestructura:
+Destroy infrastructure:
 
 ```bash
 terraform destroy -auto-approve
 ```
 
-Eliminar parámetro SSM:
+Delete SSM parameter:
 
 ```bash
 aws ssm delete-parameter --name "/challenge/dynamic_string"
@@ -202,20 +201,20 @@ aws ssm delete-parameter --name "/challenge/dynamic_string"
 
 ---
 
-## Estructura del Proyecto
+## Project Structure
 
 ```plaintext
 ├── lambda/
-│   └── handler.py         # Código Lambda
+│ └── handler.py # Lambda Code
 ├── terraform/
-│   ├── main.tf            # Infraestructura
-│   ├── variables.tf
-│   └── outputs.tf
+│ ├── main.tf # Infrastructure
+│ ├── variables.tf
+│ └── outputs.tf
 └── README.md
 ```
 
 ---
 
-## Licencia
+## License
 
-Apache 2.0 – ver archivo LICENSE para más detalles.
+Apache 2.0 – see LICENSE file for details.
