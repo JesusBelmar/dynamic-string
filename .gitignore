@@ -1,0 +1,79 @@
+# Important: Keep these files in repository
+# - lambda/templates/index.html
+# - terraform/variables.tf
+# - lambda/lambda_edge.py
+
+# Terraform files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
+terraform.plan
+terraform.tfstate.backup
+
+# Lambda package files
+lambda.zip
+lambda_package.zip
+/lambda/package/
+/lambda/__pycache__/
+/lambda/*.zip
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# AWS credentials
+*.aws/
+*.env
+*.secret
+credentials
+*.pem
+
+# Build artifacts
+/build/
+/dist/
+*.egg-info/
+
+# System files
+*.log
+*.tmp
+*.bak
+
+# Local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Documentation
+/docs/_build/
+/site/
+
+# Binary files
+*.so
+*.dylib
+*.o
+*.a
+*.exe
+*.dll
