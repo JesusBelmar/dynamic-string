@@ -98,6 +98,8 @@ terraform apply -auto-approve
 terraform output -raw api_gateway_url
 ```
 
+![Response of the solution](images/response.png)
+
 ---
 
 ## How It Works
