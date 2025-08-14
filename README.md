@@ -41,32 +41,6 @@ C --> D[SSM Parameter Store]
 
 ---
 
-## Technology Stack
-
-| Component | Technology | Purpose |
-|-------------------|------------------------------------------|---------------------------------------------|
-| **Computation** | AWS Lambda (Python 3.12) | Dynamic HTML Generation |
-| **Public API** | API Gateway | Globally Accessible HTTPS Endpoint |
-| **Configuration** | AWS SSM Parameter Store | Store Dynamic String |
-| **IaC** | Terraform (AWS Provider v5.x) | Infrastructure Deployment |
-
----
-
-## Alternatives Comparison
-
-| Criterion | API Gateway + Lambda + SSM | S3 + CloudFront + Lambda@Edge + SSM |
-|--------------------------|----------------------------|-------------------------------------|
-| **Simplicity** | High | Medium |
-| **Overall Speed** | Medium (latency <200ms) | High (global CDN) |
-| **Low Cost of Use** | Very Low | Very Low |
-| **Time to Deploy** | Fast | Slower |
-| **Local Test** | Easy | Difficult |
-| **Interview Demo** | Ideal | More Complex |
-
-**For this installment**, **API Gateway + Lambda + SSM** was chosen for its simplicity, ease of interview defense, and speed of implementation.
-
----
-
 ## Project Setup
 
 ### 1. Prerequisites
@@ -91,8 +65,8 @@ aws configure
 ### 3. Clone Repository
 
 ```bash
-git clone https://github.com/your-user/aws-dynamic-string.git
-cd aws-dynamic-string
+git clone https://github.com/your-user/dynamic-string.git
+cd dynamic-string
 ```
 
 ---
